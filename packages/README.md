@@ -2,6 +2,15 @@
 
 This directory holds the application and shared packages for the monorepo.
 
+**Note on git activity:** the root repo (this template instance) is expected
+to have light, infrequent git activity — shared config, agent rules, docs,
+and submodule pointer bumps. It is still a real git repo (required to track
+submodule pointers via `.gitmodules`), just not where feature work happens.
+The actual project code and its commit history live inside each
+`packages/<name>/`, which has its own independent git repo/remote. Seeing
+little activity at the root is expected, not a sign that git isn't set up
+there.
+
 Each package should be a self-contained directory with its own dependency
 manifest (e.g. `package.json`, `pyproject.toml`) and, where applicable, its
 own `lint` / `test` / `build` scripts that the root `workspace.yaml` tasks can

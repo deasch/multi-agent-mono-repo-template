@@ -21,6 +21,11 @@ packages:
     description: "Agent role definitions"
 
 # Agent roles / personas available in this workspace.
+# Every role has `exec`: all agents may run read-only and build/test/lint/git
+# commands anywhere under the repository root and its subfolders (including
+# packages/<name>/, since those commands need to run from inside a package's
+# own directory). `owns_paths` restricts which paths a role primarily writes
+# code/docs to — it does not restrict where commands may be run from.
 agents:
   architect:
     name: "Architect"
@@ -50,6 +55,7 @@ agents:
       - read
       - design
       - plan
+      - exec
     forbidden_actions:
       - direct commits to protected branches
       - modifying workspace.yaml without team consensus
@@ -107,6 +113,7 @@ agents:
     allowed_tools:
       - read
       - review
+      - exec
     forbidden_actions:
       - direct code edits on someone else's branch
     prompt: |
@@ -165,6 +172,7 @@ agents:
     allowed_tools:
       - read
       - write
+      - exec
     forbidden_actions:
       - writing documentation without checking code
     prompt: |

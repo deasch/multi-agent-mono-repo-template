@@ -1,0 +1,18 @@
+# Optional: mount your private workspace as a git submodule so it's visible
+# inside this repo's working tree without merging its git history into this
+# repo. See private/README.md ("Private Workspace as a Submodule").
+#
+# 1. Create (or reuse) a separate, access-controlled git repository that
+#    holds your real private/*.local.* files (the four categories described
+#    in private/README.md).
+# 2. Run:
+#      git submodule add <your-private-repo-url> private-workspace
+# 3. Commit the resulting .gitmodules entry and gitlink. This is safe to
+#    commit publicly — it only records a URL and a commit SHA, never the
+#    private repo's file contents.
+#
+# Uncomment and fill in once you have a private repo:
+#
+# [submodule "private-workspace"]
+#   path = private-workspace
+#   url = git@github.com:your-org/your-private-workspace.git

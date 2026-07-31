@@ -1,0 +1,44 @@
+---
+description: Unified workspace project context
+alwaysApply: true
+---
+
+# Project Context
+
+This repository uses a unified workspace configuration. Before every task, read
+`workspace.yaml` at the project root.
+
+## Required Reading Order
+
+1. `workspace.yaml`
+2. `shared/security.md`
+3. `shared/conventions.md`
+4. The relevant `agents/<role>.md` for the current task
+
+## Key Directories
+
+- `workspace.yaml` — canonical workspace definition.
+- `agents/` — agent role definitions.
+- `shared/` — shared rules, conventions, security, and tasks.
+- `packages/` — monorepo packages.
+- `private/` — public schema/example templates only; real private context
+  lives in the private workspace, outside this repo.
+
+## Public Knowledge vs. Private Context
+
+Key: public knowledge lives in each repo; private context and workflow
+rules live in the private workspace.
+
+- `workspace.yaml`, `agents/`, `shared/`, `AGENTS.md` are public knowledge.
+- Private context (see `private/README.md`) lives in the private workspace
+  (`AGENT_PRIVATE_WORKSPACE`, `~/.agent-private-workspace/<project-key>/`,
+  or the optional `private-workspace/` git submodule, see `.gitmodules`):
+  read if present, never copy into committed/public files.
+
+## Universal Rules
+
+- Never hardcode secrets, API keys, tokens, or credentials.
+- Never disable linters, tests, or security controls.
+- Validate all external input and reject invalid input with clear errors.
+- Use the tasks defined in `workspace.yaml` under `tasks`.
+- Work on feature branches and open pull requests for review.

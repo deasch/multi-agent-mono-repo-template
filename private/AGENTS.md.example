@@ -1,0 +1,55 @@
+# Private Workspace Repo — Private Agent Rules (Example)
+
+Copy to `AGENTS.md` at the root of your **private workspace repo** (a
+separate, private repository — not part of this template repo, and not a
+container for project repos). This is the file agents read first whenever
+the private workspace is available, in addition to (never instead of)
+whichever single project repo's own public `AGENTS.md` applies to the
+current task.
+
+Consolidates categories 1 and 2 from `private/README.md`: Local Environment
+& Credentials, and Cross-Service Relationships & Change Patterns. Team Mode
+Agent Design and Workflow Rules stay in their own files
+(`team-mode-design.local.md`, `workflow-rules.local.md`) and are referenced
+from here.
+
+## Required First Steps for Agents Using This Private Workspace
+
+1. Read this file when the private workspace is available.
+2. Read `team-mode-design.local.md` for team structure and role mapping.
+3. Read `workflow-rules.local.md` for how to approach work in this org.
+4. Confirm which single project repo the task concerns, then read that
+   project's own `AGENTS.md` (public) before making any change. Never edit
+   more than one project repo in the same task.
+
+## Local Environment & Credentials
+
+- Device-specific settings, local paths agents should know about:
+- Where API keys/tokens are stored (references/paths only, never raw
+  values — see `shared/security.md` in each project repo):
+- Per-service local setup requirements (e.g. SSO logins, VPN):
+
+## Cross-Service Relationships & Change Patterns
+
+- Service/project map: which project repos call or depend on which others:
+- Deployment ordering constraints across projects:
+- Known breaking-change patterns (e.g. "changing X's schema breaks Y"):
+- Shared infrastructure or config coupling multiple projects:
+
+## Cross-Service Commands
+
+Personal/org commands that operate across more than one project
+(read-only status checks, coordinated deploys, log tailing, etc.), run
+from outside any single project repo. Keep these here since they're
+specific to this org's cross-service setup, not any single public project
+repo. These are for observing/coordinating across projects, not for making
+code changes to more than one project repo at a time.
+
+- `<command>` — what it does, which projects it touches:
+
+## Team Mode Agent Design & Workflow Rules
+
+See `team-mode-design.local.md` and `workflow-rules.local.md` in this same
+directory for team structure and process rules. Both are referenced by
+Plan Mode before decomposing a task **within the single project repo**
+that task concerns.

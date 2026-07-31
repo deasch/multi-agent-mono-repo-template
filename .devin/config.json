@@ -1,0 +1,31 @@
+{
+  "rules": "AGENTS.md",
+  "workspace": "workspace.yaml",
+  "context": {
+    "public": ["workspace.yaml", "agents/", "shared/", "AGENTS.md"],
+    "private": {
+      "location": "external",
+      "resolutionOrder": ["private-workspace/ (submodule)", "$AGENT_PRIVATE_WORKSPACE", "~/.agent-private-workspace/<projectKey>"],
+      "workspaceEnvVar": "AGENT_PRIVATE_WORKSPACE",
+      "defaultWorkspaceRoot": "~/.agent-private-workspace",
+      "submodulePath": "private-workspace/",
+      "submoduleConfig": ".gitmodules",
+      "projectKey": "unified-ai-workspace",
+      "schemaPath": "private/",
+      "committed": false
+    }
+  },
+  "playbooks": {
+    "before_task": [
+      "Read workspace.yaml",
+      "Identify the relevant agents/<role>.md",
+      "Read shared/security.md and shared/conventions.md",
+      "Resolve the private workspace (AGENT_PRIVATE_WORKSPACE or ~/.agent-private-workspace/<project-key>) and read its *.local.* files if present; never copy content into committed or public files"
+    ]
+  },
+  "guardrails": {
+    "protectedBranches": ["main"],
+    "requirePullRequest": true,
+    "forbidSecretCommits": true
+  }
+}

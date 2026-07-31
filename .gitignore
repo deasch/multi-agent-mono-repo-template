@@ -1,0 +1,52 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# Build output
+dist/
+build/
+.next/
+out/
+
+# Local overrides / agent-local files (covers */settings.local.json for any
+# tool, e.g. .claude/settings.local.json, .cursor/settings.local.json)
+*.local.md
+*.local.json
+*.local.yaml
+*.local.yml
+settings.local.json
+.claude/settings.local.json
+.devin/config.local.json
+
+# Secrets & credentials of any kind
+*.pem
+*.key
+*.p12
+*.pfx
+.netrc
+.npmrc.local
+credentials.json
+service-account*.json
+*_rsa
+*_rsa.pub
+
+# Private context lives in the private workspace, outside this repo (see
+# private/README.md). This is a defense-in-depth guard in case a real
+# *.local.* file is ever accidentally created inside this repo's private/
+# directory — only the README and .example templates should exist here.
+private/*.local.*
+
+# OS / editor
+.DS_Store
+*.log
+.idea/
+
+# Coverage
+coverage/

@@ -1,0 +1,113 @@
+# Project Rules for AI Agents
+
+This repository uses a unified workspace configuration defined in `workspace.yaml`.
+These rules apply to all AI agents and IDEs working here, including Devin CLI,
+Cursor, Claude Code, Windsurf, and VS Code.
+
+## Required First Steps
+
+1. Read `workspace.yaml` at the start of every session.
+2. If it's unclear which project this task concerns (e.g. multiple project
+   repos/checkouts are in scope, or you're working from the private
+   workspace), ask which project before doing anything else. See
+   "Multi-Project Discipline" below.
+3. Determine which agent role from `agents/` applies to the task, or ask if unclear.
+4. Read that role file before acting.
+5. Read `shared/security.md` and `shared/conventions.md` before writing code or
+   configuration.
+
+## Multi-Project Discipline
+
+This repo is a **template**: it's the basis for every project's own
+independent repo, not a project itself, and not a container for other
+project repos. Each project gets its own repo, instantiated from this
+template, with its own history and its own submodules where useful.
+
+- Always establish which single project a task concerns before making any
+  change. Ask if it isn't already clear.
+- Once established, confine all reads and writes to that one project's
+  repo for the rest of the task.
+- Never modify files in more than one project repo within the same task,
+  even if a private workspace or cross-service command references several
+  projects (see `private/README.md` and `private/AGENTS.md.example`).
+- Cross-project context (tokens, service relationships, team design,
+  workflow rules) lives in the private workspace, not in code changes
+  spanning multiple project repos.
+
+## Project Architecture, API & Build
+
+This section is what makes this file the **public per-project AGENTS.md**
+when this template is instantiated for a real project (as opposed to the
+private-workspace `AGENTS.md` described in `private/README.md` and
+`private/AGENTS.md.example`, which covers tokens, local paths, and
+cross-service relationships instead — see "Public Knowledge vs. Private
+Context" below). Fill it in per project:
+
+- **Architecture** — high-level system design, major components, and how
+  they interact. Link to `docs/architecture.md` or equivalent if it's more
+  than a few paragraphs.
+- **API** — public interfaces this project exposes (HTTP/gRPC/library API),
+  and where their contracts are defined (OpenAPI spec, proto files, etc.).
+- **Build** — how to build, run, and test this project locally (commands
+  should match `workspace.yaml` under `tasks`).
+
+## Workspace Navigation
+
+- `workspace.yaml` — canonical workspace definition (packages, agents, tasks).
+- `agents/` — agent role definitions.
+- `shared/` — shared rules, conventions, security, and tasks.
+- `packages/` — monorepo packages.
+- `private/` — public schema/example templates only; real private context
+  lives in the private workspace (see below).
+
+## Public Knowledge vs. Private Context
+
+**Key: public knowledge lives in each repo; private context and workflow
+rules live in the private workspace.**
+
+- `workspace.yaml`, `agents/`, `shared/`, and this file are **public
+  knowledge**: committed in this repo, generic, and safe to publish or share.
+- Private context (the four categories in `private/README.md`) lives in
+  **the private workspace**: a separate directory outside this repo,
+  resolved via the `AGENT_PRIVATE_WORKSPACE` env var or the default
+  `~/.agent-private-workspace/<project-key>/`. It is never committed here or
+  anywhere.
+- The private workspace can optionally be mounted inside this repo at
+  `private-workspace/` as a git submodule (see `.gitmodules` and
+  `private/README.md`), unifying public and private context into one
+  checkout while keeping them as separate git histories.
+- Read private-workspace files if present, but never copy their content
+  into `shared/`, `agents/`, READMEs, commit messages, PR descriptions, or
+  any other committed/public artifact.
+- If the private workspace doesn't exist, proceed with public knowledge
+  only; do not assume it exists.
+
+## Universal Guardrails
+
+- Never hardcode secrets, API keys, tokens, passwords, or credentials.
+- Never commit `.env` files or local override files.
+- Never disable, bypass, or weaken linters, tests, or security controls.
+- Validate all user/external input at system boundaries.
+- Use parameterized queries, safe APIs, and framework auto-escaping.
+- Do not expose stack traces, internal paths, or secrets in error messages.
+- Never implement custom cryptography; use established, audited libraries.
+- Pin exact dependency versions and verify no known CVEs before adding.
+- All code changes must be committed to feature branches and merged via pull
+  request after review.
+
+## Task Execution
+
+- Use the tasks defined in `workspace.yaml` under `tasks`.
+- Run the relevant task before claiming a feature, fix, or refactor is complete.
+- Update `workspace.yaml` and `shared/tasks.md` when tasks change.
+
+## Multi-Agent Collaboration
+
+- If a task spans multiple roles, consult the relevant agent files.
+- The Architect owns design; the Developer owns implementation; the Reviewer owns
+  quality; the Tester owns verification; the Documentarian owns docs.
+- Escalate conflicts or security concerns to the Reviewer.
+- To maximize throughput on multi-role tasks, use the Worktree + Plan Mode +
+  Team Mode pattern in `shared/workflows.md`: decompose the task (Plan
+  Mode), give each parallelizable subtask its own git worktree, and run
+  roles concurrently (Team Mode).

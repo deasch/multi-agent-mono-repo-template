@@ -1,0 +1,28 @@
+---
+description: Agent role definitions and collaboration
+alwaysApply: true
+---
+
+# Agent Roles
+
+The workspace defines the following agent roles in `workspace.yaml` and `agents/`:
+
+- **Architect** — design and technology decisions.
+- **Developer** — implementation and tests.
+- **Reviewer** — code review, security, and quality.
+- **Tester** — test strategy and verification.
+- **Documentarian** — documentation and knowledge.
+
+## How to Use
+
+1. Determine which role matches the current task.
+2. Read `agents/<role>.md` before acting.
+3. Follow the responsibilities and constraints listed in that file.
+4. Escalate security or architecture concerns to the Reviewer or Architect.
+
+## Collaboration
+
+- The Architect owns the design; the Developer owns implementation.
+- The Reviewer must approve significant changes.
+- The Tester verifies behavior before merging.
+- The Documentarian keeps docs in sync.

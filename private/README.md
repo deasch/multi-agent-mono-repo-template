@@ -48,6 +48,38 @@ given project repo may optionally mount it as its own submodule (see
 below) purely for convenience/unified checkout; that doesn't change the
 rule that each project repo is still edited independently.
 
+## In-Repo Mode: Keeping Private Context Inside This Repo
+
+Everything above describes **"external" mode** (the default, see
+`workspace.yaml` → `context.private.mode`): the right choice whenever this
+specific repo instance might itself be redistributed, forked, or used as a
+generic starting point by others — real private content must never be
+committed in a repo that could end up public or widely shared.
+
+If, instead, **this specific repo instance** is already access-controlled
+(private, internal-only) and you don't intend to redistribute it as a
+template, you can switch to **"in-repo" mode** and commit real private
+context directly here instead of maintaining a separate external workspace:
+
+1. Set `context.private.mode: "in-repo"` in `workspace.yaml`.
+2. Copy the `.example` templates in this directory to their real names
+   (e.g. `workflow-rules.local.md.example` → `workflow-rules.local.md`) and
+   fill them in.
+3. Remove (or narrow) the `private/*.local.*` line in `.gitignore` — it
+   exists specifically to keep real `*.local.*` files out of a repo running
+   in "external" mode; in "in-repo" mode you want these files tracked.
+4. Commit the real files normally.
+
+Agents resolve private context by checking `context.private.mode` in
+`workspace.yaml` first: if `"in-repo"`, read real files directly from
+`private/*.local.*` in this repo; if `"external"` (or unset), use the
+resolution order below instead. Never mix the two — pick one mode per repo
+instance.
+
+This choice is per-repo-instance, not part of the generic template's
+contract: a fresh copy of this template defaults to `"external"` and ships
+no real private content, keeping the template itself safe to publish.
+
 ## Where the Private Workspace Lives (From a Project Repo's Perspective)
 
 Agents resolve the private workspace location in this order:
@@ -120,17 +152,23 @@ regardless of which project repo they're currently confined to.
 
 ## Rules for Agents
 
-- Treat every file under the private workspace matching `*.local.*` as
+- First check `context.private.mode` in `workspace.yaml` to know which mode
+  this repo instance uses ("external" is the default if unset).
+- Treat every file matching `*.local.*` — wherever it lives — as
   confidential.
-- Never copy content from the private workspace into `shared/`, `agents/`,
+- Never copy content from private context into `shared/`, `agents/`,
   README files, commit messages, PR descriptions, or any other artifact
-  committed in this repo or made public.
-- Never create real (non-`.example`) `*.local.*` files inside this repo's
-  `private/` directory — they belong only in the private workspace.
-- If the private workspace doesn't exist, proceed using only the public
-  knowledge in `workspace.yaml`, `agents/`, and `shared/` — do not ask the
-  user to create it unless the task explicitly requires org-specific
-  context that isn't available anywhere else.
+  intended for publication (this applies in both modes).
+- In **"external" mode** (default): never create real (non-`.example`)
+  `*.local.*` files inside this repo's `private/` directory — they belong
+  only in the private workspace. If the private workspace doesn't exist,
+  proceed using only the public knowledge in `workspace.yaml`, `agents/`,
+  and `shared/` — do not ask the user to create it unless the task
+  explicitly requires org-specific context unavailable anywhere else.
+- In **"in-repo" mode**: real `*.local.*` files under `private/` in this
+  repo are expected and committed — read them directly, but still never
+  propagate their content into files meant to leave this repo (forks,
+  extracted templates, shared snippets, etc.).
 
 ## Usage
 
@@ -147,6 +185,13 @@ regardless of which project repo they're currently confined to.
 5. Because the private workspace lives outside this repo, it is never
    committed, never included in `git clone`, and is naturally shared across
    every repo that uses this template.
+
+### In-Repo Mode
+
+See "In-Repo Mode: Keeping Private Context Inside This Repo" above — set
+`context.private.mode: "in-repo"` in `workspace.yaml`, copy the `.example`
+templates to real filenames in place, adjust `.gitignore`, and commit them.
+No external workspace needed.
 
 ### Mounting the Private Workspace Into a Project
 

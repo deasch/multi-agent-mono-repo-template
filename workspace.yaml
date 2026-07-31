@@ -168,6 +168,7 @@ agents:
 # Commands are shell commands run from the repository root.
 tasks:
   setup: "bash scripts/setup.sh"
+  add-package: "bash scripts/add-package.sh"
   lint: "echo 'No lint configured yet. Update workspace.yaml -> tasks.lint'"
   test: "echo 'No tests configured yet. Update workspace.yaml -> tasks.test'"
   build: "echo 'No build configured yet. Update workspace.yaml -> tasks.build'"
@@ -196,6 +197,15 @@ context:
     - "shared/"
     - "AGENTS.md"
   private:
+    # "external" (default): this repo may be redistributed/copied as a
+    #   generic template, so real private/proprietary content must never be
+    #   committed here — it lives outside, in the private workspace (see
+    #   resolution_order below).
+    # "in-repo": this specific repo instance is itself access-controlled and
+    #   won't be redistributed as a template, so real private/*.local.*
+    #   files are committed directly in this repo instead of externally.
+    #   See private/README.md, "In-Repo Mode".
+    mode: "external"
     location: "external"
     resolution_order:
       - "private-workspace/ (optional git submodule mounted in this repo, see .gitmodules)"
@@ -238,3 +248,5 @@ integration:
   vscode:
     settings: ".vscode/settings.json"
     tasks: ".vscode/tasks.json"
+  copilot:
+    instructions: ".github/copilot-instructions.md"

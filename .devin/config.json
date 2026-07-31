@@ -4,6 +4,7 @@
   "context": {
     "public": ["workspace.yaml", "agents/", "shared/", "AGENTS.md"],
     "private": {
+      "mode": "external",
       "location": "external",
       "resolutionOrder": ["private-workspace/ (submodule)", "$AGENT_PRIVATE_WORKSPACE", "~/.agent-private-workspace/<projectKey>"],
       "workspaceEnvVar": "AGENT_PRIVATE_WORKSPACE",

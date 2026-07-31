@@ -76,6 +76,12 @@ rules live in the private workspace.**
   `private-workspace/` as a git submodule (see `.gitmodules` and
   `private/README.md`), unifying public and private context into one
   checkout while keeping them as separate git histories.
+- If this repo instance is itself access-controlled and won't be
+  redistributed as a template, it may instead use **"in-repo" mode**
+  (`context.private.mode: "in-repo"` in `workspace.yaml`) and commit real
+  private context directly under `private/*.local.*` — see
+  `private/README.md`, "In-Repo Mode". Check this setting before assuming
+  "external" mode applies.
 - Read private-workspace files if present, but never copy their content
   into `shared/`, `agents/`, READMEs, commit messages, PR descriptions, or
   any other committed/public artifact.

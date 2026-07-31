@@ -24,10 +24,13 @@ integration file generated from (and kept in sync with) it.
   session/agent handoff protocol) referenced by every agent and IDE.
 - `docs/handover/` — tracked, ephemeral handover documents produced from
   `shared/handover.md`'s template (deleted/archived after merge).
-- `packages/` — your monorepo packages go here.
-- `private/` — public schema/example templates only; real private context
-  and workflow rules live in the private workspace, outside this repo. See
-  `private/README.md`.
+- `packages/` — your monorepo packages go here. Add new code directly, or
+  import an existing repo with `scripts/add-package.sh`/`.ps1` (see
+  `packages/README.md`).
+- `private/` — public schema/example templates only by default; real
+  private context and workflow rules live in the private workspace,
+  outside this repo — unless this repo instance opts into "in-repo" mode
+  (`context.private.mode` in `workspace.yaml`). See `private/README.md`.
 - `AGENTS.md` — cross-tool agent rules (read by Devin, Cursor, etc.).
 - `.claude/CLAUDE.md` — Claude Code instructions.
 - `.cursor/rules/` — Cursor rules.
@@ -46,18 +49,26 @@ integration file generated from (and kept in sync with) it.
 - `scripts/setup.sh` / `scripts/setup.ps1` — one-command environment setup
   (submodule init, private workspace resolution, dependency install) on
   macOS/Linux/Git-Bash/WSL or native Windows respectively.
+- `scripts/add-package.sh` / `scripts/add-package.ps1` — import an existing
+  GitHub/GHE/GitLab repo into `packages/<name>` as a git submodule.
 
 ## Getting Started
 
 1. Run `bash scripts/setup.sh` (macOS/Linux/Git Bash/WSL) or
    `scripts/setup.ps1` (native Windows/PowerShell) once.
 2. Read `workspace.yaml` — it explains the whole workspace.
-3. Add your packages under `packages/`.
+3. Add packages under `packages/`: write new code directly, or import an
+   existing repo with `scripts/add-package.sh <git-url> [name]` (see
+   `packages/README.md`).
 4. Replace the placeholder commands in `workspace.yaml` under `tasks`
    (`lint`, `test`, `build`, `sync`) with real commands, and update
    `shared/tasks.md` and `.vscode/tasks.json` to match.
 5. Update `agents/*.md` if your team needs different roles or constraints.
 6. Review `shared/security.md` and adapt it to your stack.
+7. Decide how private/proprietary context will be stored: keep the default
+   "external" mode (nothing proprietary ever committed here, see
+   `private/README.md`), or switch this repo instance to "in-repo" mode if
+   it's already private and won't be redistributed as a template.
 
 ## Agent Roles
 
@@ -88,6 +99,13 @@ or an optional `private-workspace/` git submodule mounted in this repo (see
 `.gitmodules`). It is never committed, and is shared consistently across
 every repo that uses this template. Agents may read it if present but must
 never copy its content into public files.
+
+If this repo instance is itself private/access-controlled and won't be
+redistributed as a template, it can instead switch to **"in-repo" mode**
+(`context.private.mode: "in-repo"` in `workspace.yaml`) and commit real
+private context directly under `private/*.local.*`. See `private/README.md`,
+"In-Repo Mode", for the switch-over steps. The template always defaults to
+"external" mode and ships no real private content.
 
 ## Maximizing AI Agent Workflows
 

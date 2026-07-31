@@ -38,9 +38,14 @@ service-account*.json
 *_rsa.pub
 
 # Private context lives in the private workspace, outside this repo (see
-# private/README.md). This is a defense-in-depth guard in case a real
-# *.local.* file is ever accidentally created inside this repo's private/
-# directory — only the README and .example templates should exist here.
+# private/README.md, "external" mode — the default). This is a
+# defense-in-depth guard in case a real *.local.* file is ever accidentally
+# created inside this repo's private/ directory — only the README and
+# .example templates should exist here in that mode.
+#
+# If this repo instance uses "in-repo" mode instead (see private/README.md,
+# "In-Repo Mode" — context.private.mode: "in-repo" in workspace.yaml),
+# remove this line so real private/*.local.* files get committed.
 private/*.local.*
 
 # OS / editor

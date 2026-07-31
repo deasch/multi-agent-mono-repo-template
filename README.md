@@ -24,10 +24,15 @@ integration file generated from (and kept in sync with) it.
 - `agents/` — agent role definitions (architect, developer, reviewer, tester,
   documentarian): responsibilities, constraints, allowed tools, prompts.
 - `shared/` — shared rules, conventions, security guardrails, task docs,
-  `workflows.md` (Worktree + Plan Mode + Team Mode), and `handover.md` (the
-  session/agent handoff protocol) referenced by every agent and IDE.
+  `workflows.md` (Worktree + Plan Mode + Team Mode), `handover.md` (the
+  session/agent handoff protocol), and `requirements.md` (the business
+  requirements lifecycle) referenced by every agent and IDE.
 - `docs/handover/` — tracked, ephemeral handover documents produced from
   `shared/handover.md`'s template (deleted/archived after merge).
+- `docs/requirements/` — tracked business requirements moving through
+  draft → refined → approved → in-progress → done (see
+  `shared/requirements.md`); each explicitly lists the package(s) it
+  concerns.
 - `packages/` — your monorepo packages go here. Add new code directly, or
   import an existing repo with `scripts/add-package.sh`/`.ps1` (see
   `packages/README.md`).
@@ -44,6 +49,9 @@ integration file generated from (and kept in sync with) it.
 - `.devin/config.json` — Devin configuration.
 - `.devin/skills/handover/SKILL.md` — the `/handover` skill (session/agent
   handoff, see `shared/handover.md`).
+- `.devin/skills/refine-requirement/SKILL.md` — the `/refine-requirement`
+  skill (drafts the Refined Spec for a business requirement, see
+  `shared/requirements.md`).
 - `.github/copilot-instructions.md` — GitHub Copilot instructions.
 - `.vscode/` — editor settings, recommended extensions, and tasks wired to
   `workspace.yaml`.
@@ -58,6 +66,9 @@ integration file generated from (and kept in sync with) it.
 - `scripts/check-package-clean.sh` — scan a package's changes for this root
   repo's proprietary content before pushing it back to its own remote. See
   `packages/README.md`, "Working in a Package (Pull → Work → Push Back)".
+- `scripts/check-sync.sh` — verify every AI tool's instruction file still
+  references the same canonical `shared/*.md` docs (`workspace.yaml`'s
+  `tasks.sync`). Run it after adding/renaming a shared doc.
 
 ## Getting Started
 
@@ -68,8 +79,11 @@ integration file generated from (and kept in sync with) it.
    existing repo with `scripts/add-package.sh <git-url> [name]` (see
    `packages/README.md`).
 4. Replace the placeholder commands in `workspace.yaml` under `tasks`
-   (`lint`, `test`, `build`, `sync`) with real commands, and update
-   `shared/tasks.md` and `.vscode/tasks.json` to match.
+   (`lint`, `test`, `build`) with real commands, and update
+   `shared/tasks.md` and `.vscode/tasks.json` to match. `sync` is already
+   wired to `scripts/check-sync.sh` — run it whenever you add/rename a
+   `shared/*.md` doc, to catch any AI tool that wasn't updated to reference
+   it (see "Keeping All Agents in Sync" below).
 5. Update `agents/*.md` if your team needs different roles or constraints.
 6. Review `shared/security.md` and adapt it to your stack.
 7. Decide how private/proprietary context will be stored: keep the default
@@ -125,7 +139,46 @@ for the runnable steps.
 When a task is incomplete and needs to change hands — a session ending, a
 role/worktree switch, or escalating to a human — use the handoff protocol in
 `shared/handover.md` (automated by the `/handover` Devin CLI skill) so
-context, decisions, and next steps aren't lost.
+context, decisions, and next steps aren't lost. Trigger it proactively at
+70% context-window usage, at the latest — don't wait until it's nearly
+exhausted.
+
+## Business Requirements: Admin → Agent → Admin → Agents
+
+Business requirements flow through `docs/requirements/<slug>.md`: an admin
+writes a plain-language draft, an agent (Architect) refines it into a
+structured spec (scope, acceptance criteria, open questions) without
+implementing anything, the admin reviews and approves it, and only then do
+agents implement it via Plan Mode → Team Mode. Every requirement must
+explicitly list which `packages/<name>/` it concerns — requirements
+touching multiple packages are split into one per-package sub-requirement
+first, so each implementation task still stays confined to a single
+project repo. Requirements that change _how_ a package is built (new data
+stores/dependencies, breaking API changes, security-model changes) are
+flagged `architecture_impact: true` and need the admin/project lead's
+explicit answer to every open question, not just a quick skim. See
+`shared/requirements.md` (automated by the `/refine-requirement` Devin CLI
+skill).
+
+## Communication with the Admin/Project Lead
+
+Every question, request, or approval ask directed at the admin/project
+lead — requirement open questions, handover documents for a human,
+escalations — is always explained like they're 5 first: plain words, no
+jargon or acronyms, short sentences, everyday comparisons. More technical
+detail is available underneath or on request, but never required to
+decide. See `shared/rules.md`, "Communication".
+
+## Keeping All Agents in Sync
+
+Every AI tool reads its own integration file (`AGENTS.md`, `.claude/CLAUDE.md`,
+`.cursor/rules/`, `.windsurf/rules/`, `.github/copilot-instructions.md`,
+`.devin/config.json`) but all of them are meant to point at the same
+canonical `shared/*.md` docs, so switching tools never means switching
+information. `scripts/check-sync.sh` (task `sync`) checks that every one of
+those files still references each canonical doc — run it whenever you add,
+rename, or retire a `shared/*.md` file, and after editing any one tool's
+instructions, to make sure the others didn't silently fall behind.
 
 ## Conventions & Security
 

@@ -8,6 +8,10 @@
   and `handover.md` (the session/agent handoff protocol).
 - `docs/handover/` contains tracked, ephemeral handover documents generated
   from `shared/handover.md`'s template; delete/archive after merge.
+- `docs/requirements/` contains tracked business requirements moving
+  through the draft/refined/approved/in-progress/done lifecycle defined in
+  `shared/requirements.md`; each names the package(s) it concerns
+  explicitly.
 - `packages/` is the monorepo package directory.
 - IDE/tool-specific configuration lives in `.vscode/`, `.cursor/`, `.windsurf/`,
   `.claude/`, `.devin/`, and `.github/copilot-instructions.md`.

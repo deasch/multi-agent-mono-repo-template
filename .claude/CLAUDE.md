@@ -18,6 +18,9 @@ single source of truth for packages, agent roles, tasks, and shared knowledge.
   (session/agent handoff protocol).
 - `docs/handover/` — tracked, ephemeral handover documents (see
   `shared/handover.md`).
+- `docs/requirements/` — tracked business requirements moving through the
+  draft/refined/approved/in-progress/done lifecycle (see
+  `shared/requirements.md`).
 - `packages/` — monorepo packages.
 - `private/` — public schema/example templates only; real private context
   lives in the private workspace, outside this repo.
@@ -66,10 +69,31 @@ Run the relevant task before declaring work complete.
 - **Documentarian** owns documentation.
 
 If a task spans roles, consult the relevant agent files and keep pull requests
-focused and reviewable.
+focused and reviewable. For multi-role work, follow Worktree + Plan Mode +
+Team Mode in `shared/workflows.md`.
 
 ## Session Handover
 
 If work is incomplete when a session ends or ownership changes hands
 (role/worktree switch, escalation to a human), follow the handoff protocol
-in `shared/handover.md`.
+in `shared/handover.md`. Trigger it proactively at 70% context usage, at
+the latest — don't wait until it's nearly exhausted.
+
+## Business Requirements Lifecycle
+
+Admin writes a draft (`docs/requirements/<slug>.md`) → Architect refines it
+into a spec → admin approves → agents implement via Plan Mode/Team Mode.
+See `shared/requirements.md`. Every requirement must explicitly list which
+`packages/<name>/` it concerns; ask the admin if unclear, and split
+multi-package requirements into one per-package sub-requirement before
+implementation. Requirements that change how a package is built
+(`architecture_impact: true`) need the admin/project lead's explicit
+answer to every open question, not just a quick skim.
+
+## Communication with the Admin/Project Lead
+
+Every question, request, or approval ask directed at the admin/project
+lead is always explained like they're 5 first — plain words, no jargon,
+short sentences, everyday comparisons — with more technical detail
+available underneath or on request. See `shared/rules.md`,
+"Communication".

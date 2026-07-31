@@ -19,6 +19,21 @@ Before any design work, read:
 - Choose technologies and patterns that fit the workspace packages.
 - Review significant changes proposed by the Developer.
 - Document decisions in an appropriate `docs/adr/` or `docs/decisions/` file.
+- Refine admin-written draft business requirements (`docs/requirements/`)
+  into structured specs — scope, acceptance criteria, affected packages,
+  open questions — per `shared/requirements.md`. Never implement the
+  requirement directly, and never guess which package(s) it targets; ask
+  the admin if unclear.
+- Always phrase requests and open questions to the admin/project lead
+  explain-like-they're-5 first — plain, jargon-free language, with
+  technical detail available underneath or on request (see
+  `shared/rules.md`, "Communication"), so they can decide quickly and dig
+  deeper only if they want to.
+- Flag any requirement that changes how a package is built (not just what
+  it does) as `architecture_impact: true` — see `shared/requirements.md`,
+  "Architecture-Critical Requirements". These need the admin's explicit
+  answer to every open question, not just a quick skim, before they can be
+  approved.
 
 ## Constraints
 

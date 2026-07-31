@@ -14,8 +14,14 @@ project.
 
 Trigger this protocol when:
 
-- A session is ending (or its context window is nearly exhausted) with the
-  task still incomplete.
+- **The session's context window reaches 70% usage, at the latest** —
+  don't wait until it's nearly exhausted. Produce the handover proactively
+  at 70% even if the task feels close to done; running out of context
+  mid-write is worse than handing off slightly early. If the AI tool
+  exposes a token/context-usage indicator, treat 70% as a hard ceiling for
+  starting the handover, not a soft suggestion.
+- A session is ending with the task still incomplete, regardless of token
+  usage.
 - Work is moving between agent roles or worktrees in **Team Mode** (see
   `shared/workflows.md`) — e.g. Developer finishing a subtask that Reviewer
   or Tester needs to pick up.
@@ -42,7 +48,7 @@ whether the receiver is another agent or a human:
    (agent or human) needs to decide or unblock before continuing.
 6. **Next Steps** — a concrete, ordered list of what to do next.
 7. **Related Context (Pointers Only)** — links to the branch/worktree/PR,
-   and, if relevant, *paths* into the private workspace (e.g. "see
+   and, if relevant, _paths_ into the private workspace (e.g. "see
    `team-mode-design.local.md` for role overrides"). **Never** inline private
    workspace content here — see "Private Context" below.
 
@@ -52,11 +58,17 @@ A minimal template:
 # Handover: <task-slug>
 
 ## Task Objective & Scope
+
 ## Current State / Progress
+
 ## Key Decisions & Rationale
+
 ## Files & Paths Touched
+
 ## Open Questions / Blockers
+
 ## Next Steps
+
 ## Related Context
 ```
 
@@ -93,12 +105,15 @@ The receiving agent or human must:
 When the receiver is a human operator rather than another agent, use the
 same document and sections, but write "Current State / Progress," "Open
 Questions / Blockers," and "Next Steps" so a non-agent reader can act on
-them without re-reading the whole session: plain language, no assumption the
-reader has the original conversation, and explicit callouts for anything
-that needs a human decision (e.g. approving a design choice, providing
-credentials, resolving a merge conflict). This same content can be pasted
-into a PR description or comment instead of (or in addition to) the
-standalone file, per `shared/conventions.md`'s Git conventions.
+them without re-reading the whole session: explain like they're 5 first
+(see `shared/rules.md`, "Communication") — plain language, no jargon, no
+assumption the reader has the original conversation — with explicit
+callouts for anything that needs a human decision (e.g. approving a design
+choice, providing credentials, resolving a merge conflict). Offer more
+technical detail underneath or on request; never require it to act. This
+same content can be pasted into a PR description or comment instead of (or
+in addition to) the standalone file, per `shared/conventions.md`'s Git
+conventions.
 
 ## Private Context
 

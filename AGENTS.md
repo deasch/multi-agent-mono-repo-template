@@ -138,8 +138,41 @@ rules live in the private workspace.**
 
 When a task is incomplete and control needs to change hands — a session
 ending, a role/worktree switch in Team Mode, or escalating a blocker to a
-human — follow the handoff protocol in `shared/handover.md`. It defines the
-required package (objective, progress, decisions, files touched, open
-questions, next steps) and where it's stored (`docs/handover/<task-slug>.md`).
-Use the `/handover` skill (`.devin/skills/handover/SKILL.md`) to produce or
-resume one.
+human — follow the handoff protocol in `shared/handover.md`. Trigger it
+proactively once the session's context window hits 70% usage, at the
+latest — don't wait until it's nearly exhausted. It defines the required
+package (objective, progress, decisions, files touched, open questions,
+next steps) and where it's stored (`docs/handover/<task-slug>.md`). Use the
+`/handover` skill (`.devin/skills/handover/SKILL.md`) to produce or resume
+one.
+
+## Business Requirements Lifecycle
+
+Business requirements flow: admin writes a draft → an agent (Architect)
+refines it into a structured spec → admin approves → agents implement via
+Plan Mode → Team Mode. Full protocol, frontmatter schema, and template in
+`shared/requirements.md`; files live in `docs/requirements/<slug>.md`. Every
+requirement **must** explicitly list which `packages/<name>/` it concerns —
+never leave this implicit, and never guess if it's ambiguous; ask the admin.
+A requirement touching more than one package must be split into one
+per-package sub-requirement before implementation, per Multi-Project
+Discipline above. Use the `/refine-requirement` skill
+(`.devin/skills/refine-requirement/SKILL.md`) to produce the Refined Spec.
+
+Any requirement that changes how a package is built — not just what it
+does (new data stores/dependencies, breaking API/schema changes,
+service-to-service changes, security-model changes) — must be flagged
+`architecture_impact: true`, per `shared/requirements.md`,
+"Architecture-Critical Requirements". These require the admin/project
+lead's explicit answer to every open question, not just a quick skim,
+before approval.
+
+## Communication with the Admin/Project Lead
+
+Every question, request, or approval ask directed at the admin/project
+lead is always explained like they're 5 first — plain words, no jargon or
+acronyms, short sentences, everyday comparisons — with more technical
+detail available underneath or on request, never required to decide. See
+`shared/rules.md`, "Communication". This applies everywhere: requirement
+open questions, handover documents for a human, escalations, and PR
+descriptions.

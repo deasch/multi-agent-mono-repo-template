@@ -26,9 +26,30 @@ The workspace defines the following agent roles in `workspace.yaml` and `agents/
 - The Reviewer must approve significant changes.
 - The Tester verifies behavior before merging.
 - The Documentarian keeps docs in sync.
+- For multi-role work, follow Worktree + Plan Mode + Team Mode in
+  `shared/workflows.md`.
 
 ## Handover
 
 If work is incomplete when a session ends or ownership changes hands
 (role/worktree switch, escalation to a human), follow the handoff protocol
-in `shared/handover.md`.
+in `shared/handover.md`. Trigger it proactively at 70% context usage, at
+the latest — don't wait until it's nearly exhausted.
+
+## Business Requirements
+
+Admin writes a draft (`docs/requirements/<slug>.md`) → Architect refines it
+into a spec → admin approves → agents implement. See
+`shared/requirements.md`. Every requirement must explicitly list which
+`packages/<name>/` it concerns; ask if unclear, and split multi-package
+requirements into one per-package sub-requirement before implementation.
+Requirements that change how a package is built (`architecture_impact:
+true`) need the admin/project lead's explicit answer to every open
+question, not just a quick skim.
+
+## Communication with the Admin/Project Lead
+
+Every question, request, or approval ask is always explained like they're
+5 first — plain words, no jargon, short sentences, everyday comparisons —
+with more technical detail available underneath or on request. See
+`shared/rules.md`, "Communication".

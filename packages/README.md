@@ -71,6 +71,8 @@ control once pushed. Never create or leave any of the following **inside**
 `packages/<name>/`, even temporarily:
 
 - Backlog items, sprint/roadmap notes, or planning content.
+- Business requirements (`docs/requirements/*.md`, see
+  `shared/requirements.md`) — those belong only in this root repo.
 - Handover documents (`docs/handover/*.md`) — those belong only in this
   root repo.
 - Private context of any kind (`private/*.local.*`, or content copied from

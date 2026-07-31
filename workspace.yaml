@@ -27,6 +27,7 @@ agents:
     description: "Owns high-level design, technology choices, and system architecture."
     owns_paths:
       - "docs/architecture/"
+      - "docs/requirements/"
       - "workspace.yaml (design-related fields)"
     depends_on: []
     responsibilities:
@@ -34,6 +35,13 @@ agents:
       - Define and document architecture and major decisions.
       - Validate designs against security, performance, and cost constraints.
       - Review significant changes proposed by Developer.
+      - Refine admin-written draft business requirements into structured
+        specs per shared/requirements.md (never implement them directly).
+      - Always phrase requests and open questions to the admin/project
+        lead explain-like-they're-5 first, with detail available on
+        request (see shared/rules.md, Communication).
+      - Flag architecture-critical requirements (architecture_impact:
+        true); these need the admin's explicit answer, not a skim.
     constraints:
       - Do not implement production code directly.
       - Do not approve destructive changes without Reviewer.
@@ -173,7 +181,7 @@ tasks:
   lint: "echo 'No lint configured yet. Update workspace.yaml -> tasks.lint'"
   test: "echo 'No tests configured yet. Update workspace.yaml -> tasks.test'"
   build: "echo 'No build configured yet. Update workspace.yaml -> tasks.build'"
-  sync: "echo 'Run your workspace-to-IDE sync script here'"
+  sync: "bash scripts/check-sync.sh"
 
 # Shared knowledge files referenced by agents and IDEs.
 shared:
@@ -183,6 +191,7 @@ shared:
   tasks: "shared/tasks.md"
   workflows: "shared/workflows.md"
   handover: "shared/handover.md"
+  requirements: "shared/requirements.md"
 
 # Public knowledge vs. private context.
 # Key: public knowledge lives in each repo; private context and workflow

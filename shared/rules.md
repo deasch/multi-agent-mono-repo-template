@@ -8,6 +8,15 @@ All AI agents and IDEs must follow these rules when working in this repository.
 2. Identify the relevant `agents/<role>.md` for the work and read it.
 3. Read `shared/security.md` for guardrails before writing code or configuration.
 
+## Keeping All Agents in Sync
+
+All agents/IDEs must see the same information at all times. If you add,
+rename, or retire a `shared/*.md` doc, or change what an agent role does,
+update every tool's integration file (`AGENTS.md`, `.claude/CLAUDE.md`,
+`.cursor/rules/`, `.windsurf/rules/`, `.github/copilot-instructions.md`) to
+match, then run `scripts/check-sync.sh` (task `sync`) to confirm none of
+them fell out of sync.
+
 ## Code Quality
 
 - Follow the conventions in `shared/conventions.md`.
@@ -28,3 +37,9 @@ All AI agents and IDEs must follow these rules when working in this repository.
 - Be concise and direct in responses.
 - Cite files and lines when referencing code.
 - Ask clarifying questions if the task or scope is ambiguous.
+- **Any question, request, or approval ask directed at the admin/project
+  lead is always explained like they're 5 first**: plain words, no jargon
+  or acronyms, short sentences, everyday comparisons. Offer more technical
+  detail underneath or on request, but never require the admin to read the
+  technical version to make a decision. See `shared/requirements.md` for
+  how this applies to business requirements specifically.

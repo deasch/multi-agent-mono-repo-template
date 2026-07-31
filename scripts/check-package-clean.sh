@@ -26,7 +26,7 @@ if [ ! -d "$PKG" ]; then
   exit 1
 fi
 
-PATTERNS='backlog|roadmap|sprint|handover|team-mode-design|workflow-rules|cross-service-context|\.local\.'
+PATTERNS='backlog|roadmap|sprint|handover|requirements/|team-mode-design|workflow-rules|cross-service-context|\.local\.'
 
 echo "==> Checking packages/$NAME for content that should stay in this root repo"
 cd "$PKG"

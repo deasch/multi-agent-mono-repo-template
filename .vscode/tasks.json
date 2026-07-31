@@ -24,6 +24,17 @@
       "problemMatcher": []
     },
     {
+      "label": "Check agent sync",
+      "type": "shell",
+      "command": "bash ${workspaceFolder}/scripts/check-sync.sh",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Read workspace config",
       "type": "shell",
       "command": "cat ${workspaceFolder}/workspace.yaml",

@@ -18,6 +18,7 @@
   },
   "playbooks": {
     "before_task": [
+      "Run scripts/setup.sh (or .ps1) once per fresh checkout instead of manually probing git/private-workspace state with ad-hoc shell commands -- it already resolves this safely in one call, and avoids hitting a tool's own command-approval/sandbox limits",
       "Read workspace.yaml",
       "Identify the relevant agents/<role>.md",
       "Read shared/security.md and shared/conventions.md",

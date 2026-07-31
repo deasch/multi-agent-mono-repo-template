@@ -5,6 +5,10 @@ single source of truth for packages, agent roles, tasks, and shared knowledge.
 
 ## Before Every Task
 
+0. Run `scripts/setup.sh` (or `.ps1`) once per fresh checkout instead of
+   manually probing git/private-workspace state with ad-hoc shell
+   commands — it already resolves this safely in one call, and avoids
+   hitting a tool's own command-approval/sandbox limits.
 1. Read `workspace.yaml`.
 2. Identify the relevant agent role from `agents/`.
 3. Read that role file.

@@ -15,6 +15,10 @@ The workspace defines the following agent roles in `workspace.yaml` and `agents/
 
 ## How to Use
 
+0. Run `scripts/setup.sh` (or `.ps1`) once per fresh checkout instead of
+   manually probing git/private-workspace state with ad-hoc shell
+   commands — it already resolves this safely in one call, and avoids
+   hitting a tool's own command-approval/sandbox limits.
 1. Determine which role matches the current task.
 2. Read `agents/<role>.md` before acting.
 3. Follow the responsibilities and constraints listed in that file.

@@ -4,6 +4,13 @@ All AI agents and IDEs must follow these rules when working in this repository.
 
 ## Before Every Task
 
+0. Run `scripts/setup.sh` (or `.ps1`) once per fresh checkout instead of
+   manually probing git/private-workspace state with ad-hoc shell
+   commands — it already resolves submodules, the private workspace, and
+   root git status safely in one call. Chaining several unrelated
+   commands together (reading `.gitmodules`, listing `$HOME`, checking env
+   vars, `git rev-parse`, ...) is more likely to hit a tool's own
+   command-approval/sandbox limits than to actually be necessary.
 1. Read `workspace.yaml` at the start of every session or task.
 2. Identify the relevant `agents/<role>.md` for the work and read it.
 3. Read `shared/security.md` for guardrails before writing code or configuration.

@@ -6,6 +6,14 @@ Cursor, Claude Code, Windsurf, GitHub Copilot, and VS Code.
 
 ## Required First Steps
 
+0. Run `scripts/setup.sh` (or `.ps1`) once per fresh checkout instead of
+   manually probing git/private-workspace state with ad-hoc shell
+   commands — it already resolves submodules, the private workspace, and
+   root git status safely in one call. Manually chaining several unrelated
+   commands (reading `.gitmodules`, listing `$HOME`, checking env vars,
+   `git rev-parse`, ...) in one invocation is more likely to hit a tool's
+   own command-approval/sandbox limits (e.g. restricted access outside the
+   project directory) than to actually be necessary.
 1. Read `workspace.yaml` at the start of every session.
 2. If it's unclear which project this task concerns (e.g. multiple project
    repos/checkouts are in scope, or you're working from the private

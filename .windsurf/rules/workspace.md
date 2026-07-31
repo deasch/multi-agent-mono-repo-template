@@ -5,6 +5,10 @@ Read it at the start of every session.
 
 ## Required Reading
 
+0. Run `scripts/setup.sh` (or `.ps1`) once per fresh checkout instead of
+   manually probing git/private-workspace state with ad-hoc shell
+   commands — it already resolves this safely in one call, and avoids
+   hitting a tool's own command-approval/sandbox limits.
 1. `workspace.yaml`
 2. `shared/security.md`
 3. `shared/conventions.md`

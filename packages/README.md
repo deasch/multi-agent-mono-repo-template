@@ -35,6 +35,11 @@ scripts/add-package.sh <git-url> [package-name]      # macOS/Linux/Git Bash/WSL
 scripts/add-package.ps1 <git-url> [package-name]     # native Windows
 ```
 
+If the root repo itself doesn't have a `.git` yet (e.g. you downloaded this
+template as a zip instead of `git clone`ing it), the script initializes one
+automatically before adding the submodule — git submodules require the root
+to be a git repo.
+
 This adds it as a **git submodule** — the package keeps its own commit
 history and remote, and this repo only tracks a pointer (URL + pinned
 commit SHA) to it, so nothing proprietary from the package's own repo

@@ -15,6 +15,17 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
+# git submodule add requires the root itself to be a git repo. A fresh
+# instance of this template (downloaded as a zip, or copied rather than
+# `git clone`d) won't have a `.git` yet — initialize it automatically so
+# importing a package as a submodule works out of the box.
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "==> No git repository found at $REPO_ROOT — running 'git init'"
+  git init
+  echo "    (root repo initialized; this only tracks config/docs/submodule"
+  echo "     pointers here — see packages/README.md, 'Note on git activity')"
+fi
+
 URL="${1:-}"
 if [ -z "$URL" ]; then
   echo "Usage: scripts/add-package.sh <git-url> [package-name]" >&2

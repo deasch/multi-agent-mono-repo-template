@@ -10,6 +10,14 @@ cd "$REPO_ROOT"
 
 echo "==> Setting up $(basename "$REPO_ROOT")"
 
+# 0. A fresh instance of this template (downloaded as a zip, or copied
+#    rather than `git clone`d) won't have a `.git` yet. Submodules require
+#    the root itself to be a git repo, so initialize it automatically.
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "==> No git repository found at $REPO_ROOT — running 'git init'"
+  git init
+fi
+
 # 1. Initialize git submodules (private-workspace/, packages/*, etc.) if any.
 if [ -f ".gitmodules" ]; then
   echo "==> Initializing git submodules"

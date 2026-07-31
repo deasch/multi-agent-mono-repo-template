@@ -8,6 +8,15 @@ Set-Location $RepoRoot
 
 Write-Host "==> Setting up $(Split-Path -Leaf $RepoRoot)"
 
+# 0. A fresh instance of this template (downloaded as a zip, or copied
+#    rather than `git clone`d) won't have a `.git` yet. Submodules require
+#    the root itself to be a git repo, so initialize it automatically.
+git rev-parse --is-inside-work-tree *> $null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "==> No git repository found at $RepoRoot -- running 'git init'"
+    git init
+}
+
 # 1. Initialize git submodules (private-workspace/, packages/*, etc.) if any.
 if (Test-Path ".gitmodules") {
     Write-Host "==> Initializing git submodules"

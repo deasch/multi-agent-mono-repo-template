@@ -22,6 +22,18 @@ $ErrorActionPreference = "Stop"
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot
 
+# git submodule add requires the root itself to be a git repo. A fresh
+# instance of this template (downloaded as a zip, or copied rather than
+# `git clone`d) won't have a `.git` yet -- initialize it automatically so
+# importing a package as a submodule works out of the box.
+git rev-parse --is-inside-work-tree *> $null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "==> No git repository found at $RepoRoot -- running 'git init'"
+    git init
+    Write-Host "    (root repo initialized; this only tracks config/docs/submodule"
+    Write-Host "     pointers here -- see packages/README.md, 'Note on git activity')"
+}
+
 if (-not $Name) {
     $Name = [System.IO.Path]::GetFileNameWithoutExtension($Url)
 }

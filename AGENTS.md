@@ -34,6 +34,22 @@ template, with its own history and its own submodules where useful.
   workflow rules) lives in the private workspace, not in code changes
   spanning multiple project repos.
 
+This repo can also act as the single place you pull, work on, and push
+back multiple **separate project repos** from, each mounted under
+`packages/<name>` as its own git submodule (its own remote/history,
+possibly on a different host — GitHub, GHE, GitLab, etc.). See
+`packages/README.md`, "Working in a Package (Pull → Work → Push Back)".
+When working inside `packages/<name>`:
+
+- You are inside that project's own repo — commits and pushes there go to
+  its own remote, never to this root repo.
+- Never create or leave this root repo's proprietary/internal content
+  (backlog items, roadmap notes, handover documents, private context, team
+  design, workflow rules) inside `packages/<name>/` — it must never leave
+  through that project's own repo. See `packages/README.md`'s guardrails.
+- Run `scripts/check-package-clean.sh <name>` before pushing a package back
+  to its own remote.
+
 ## Project Architecture, API & Build
 
 This section is what makes this file the **public per-project AGENTS.md**

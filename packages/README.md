@@ -40,5 +40,48 @@ leaks into this repo beyond that reference. After running it:
 This is separate from, and composes with, the private-workspace submodule
 pattern described in `private/README.md`.
 
+## Working in a Package (Pull → Work → Push Back)
+
+This root repo is meant to be the single place you work from across many
+projects, each living on its own host (GitHub, GHE, GitLab, ...) as its own
+git repo mounted under `packages/<name>`. The workflow for any one project:
+
+1. **Pull**: `git submodule update --init --remote packages/<name>` (or just
+   clone this repo with `git clone --recurse-submodules`, or run
+   `scripts/setup.sh`).
+2. **Work**: `cd packages/<name>` — you are now inside that project's own,
+   independent git repository (its own remote, branches, and history,
+   completely separate from this root repo's). Branch, commit, and test as
+   normal, following that project's own conventions/`AGENTS.md` if it has one.
+3. **Check before pushing**: run
+   `scripts/check-package-clean.sh <name>` from the root repo. It scans the
+   package's changes for markers of this root repo's own proprietary/
+   internal content (see Guardrails below) and fails if it finds any.
+4. **Push back**: still inside `packages/<name>`, `git push` — this goes to
+   _that project's own remote_, not this root repo's. Open a PR there as
+   usual.
+5. **Record the pointer**: back in the root repo, `git add packages/<name>`
+   and commit — this only records the package's URL and the new commit SHA
+   (a gitlink), never its file contents, so it's always safe to commit here.
+
+### Guardrails: What Must Never Leave Through a Package
+
+A package's own repo may be public, third-party, or otherwise outside your
+control once pushed. Never create or leave any of the following **inside**
+`packages/<name>/`, even temporarily:
+
+- Backlog items, sprint/roadmap notes, or planning content.
+- Handover documents (`docs/handover/*.md`) — those belong only in this
+  root repo.
+- Private context of any kind (`private/*.local.*`, or content copied from
+  it) — see `private/README.md`.
+- Team-mode design, workflow rules, or cross-service relationship notes.
+- Anything referencing other projects, internal tooling, or org structure
+  that isn't relevant to that package on its own.
+
+If a task naturally produces this kind of content while you're working
+inside a package, write it in the root repo (`docs/handover/`, or the
+private workspace) instead — never inside `packages/<name>/`.
+
 This directory is intentionally empty in the template. Remove the
 `.gitkeep` file once the first real package is added.

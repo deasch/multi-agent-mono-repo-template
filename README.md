@@ -4,7 +4,11 @@ A monorepo template with a **single, unified workspace configuration**
 (`workspace.yaml`) that drives consistent behavior across AI coding agents
 (Devin, Claude Code, Cursor, Windsurf, GitHub Copilot) and IDEs (VS Code),
 plus a multi-agent-role workflow for humans and AI to collaborate on the
-same codebase.
+same codebase. It's meant to be the single foundation you develop many
+projects from — each project its own git repo, on any host (GitHub, GHE,
+GitLab, ...), pulled in under `packages/<name>` as a submodule so you can
+work on it here and push changes back to its own repo without ever leaking
+this root repo's proprietary content into it.
 
 ## Why
 
@@ -51,6 +55,9 @@ integration file generated from (and kept in sync with) it.
   macOS/Linux/Git-Bash/WSL or native Windows respectively.
 - `scripts/add-package.sh` / `scripts/add-package.ps1` — import an existing
   GitHub/GHE/GitLab repo into `packages/<name>` as a git submodule.
+- `scripts/check-package-clean.sh` — scan a package's changes for this root
+  repo's proprietary content before pushing it back to its own remote. See
+  `packages/README.md`, "Working in a Package (Pull → Work → Push Back)".
 
 ## Getting Started
 

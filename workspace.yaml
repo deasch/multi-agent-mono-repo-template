@@ -169,6 +169,7 @@ agents:
 tasks:
   setup: "bash scripts/setup.sh"
   add-package: "bash scripts/add-package.sh"
+  check-package-clean: "bash scripts/check-package-clean.sh"
   lint: "echo 'No lint configured yet. Update workspace.yaml -> tasks.lint'"
   test: "echo 'No tests configured yet. Update workspace.yaml -> tasks.test'"
   build: "echo 'No build configured yet. Update workspace.yaml -> tasks.build'"

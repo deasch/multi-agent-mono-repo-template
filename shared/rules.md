@@ -8,6 +8,15 @@ All AI agents and IDEs must follow these rules when working in this repository.
 2. Identify the relevant `agents/<role>.md` for the work and read it.
 3. Read `shared/security.md` for guardrails before writing code or configuration.
 
+## Root Repo Git Is Optional, Permanently
+
+It is completely fine, on first use and forever, for this project root to
+have no `.git` at all — never treat that as an error. It's meant to stay a
+plain local folder for config/orchestration; real project work and its
+commit history live inside each `packages/<name>/`, each with its own
+independent git repo. See `AGENTS.md`, "This Root Repo Never Needs Its Own
+git init", and `packages/README.md`, "Note on git activity".
+
 ## Keeping All Agents in Sync
 
 All agents/IDEs must see the same information at all times. If you add,

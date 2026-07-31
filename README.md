@@ -62,13 +62,29 @@ integration file generated from (and kept in sync with) it.
   (submodule init, private workspace resolution, dependency install) on
   macOS/Linux/Git-Bash/WSL or native Windows respectively.
 - `scripts/add-package.sh` / `scripts/add-package.ps1` — import an existing
-  GitHub/GHE/GitLab repo into `packages/<name>` as a git submodule.
+  GitHub/GHE/GitLab repo into `packages/<name>`, as a git submodule if this
+  root has `.git`, or a plain `git clone` if it doesn't (see
+  "Root Repo Git Is Optional" below — both are fully supported).
 - `scripts/check-package-clean.sh` — scan a package's changes for this root
   repo's proprietary content before pushing it back to its own remote. See
   `packages/README.md`, "Working in a Package (Pull → Work → Push Back)".
 - `scripts/check-sync.sh` — verify every AI tool's instruction file still
   references the same canonical `shared/*.md` docs (`workspace.yaml`'s
   `tasks.sync`). Run it after adding/renaming a shared doc.
+
+## Root Repo Git Is Optional, Permanently
+
+It is completely fine — on first use, and forever — for this project root
+to have **no `.git` at all**. It's meant to stay a plain local folder
+holding config/orchestration (`workspace.yaml`, `agents/`, `shared/`,
+docs) for the project lead/team, not where feature work happens. Never
+treat a missing `.git` at the root as an error. Real project code and its
+commit history live entirely inside each `packages/<name>/`, each with its
+own independent git repo/remote — `scripts/add-package.sh`/`.ps1` and
+`scripts/setup.sh`/`.ps1` detect whether the root has `.git` and use git
+submodules or plain `git clone`s accordingly, automatically. See
+`AGENTS.md`, "This Root Repo Never Needs Its Own git init", and
+`packages/README.md`, "Note on git activity".
 
 ## Getting Started
 

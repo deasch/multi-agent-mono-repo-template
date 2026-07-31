@@ -10,20 +10,17 @@ cd "$REPO_ROOT"
 
 echo "==> Setting up $(basename "$REPO_ROOT")"
 
-# 0. A fresh instance of this template (downloaded as a zip, or copied
-#    rather than `git clone`d) won't have a `.git` yet. Submodules require
-#    the root itself to be a git repo, so initialize it automatically.
-if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-  echo "==> No git repository found at $REPO_ROOT — running 'git init'"
-  git init
-fi
-
-# 1. Initialize git submodules (private-workspace/, packages/*, etc.) if any.
-if [ -f ".gitmodules" ]; then
+# 1. Initialize git submodules (private-workspace/, packages/*, etc.), if
+#    any exist. It's expected and fine for this root to have no .git at
+#    all — it's meant to stay a plain local folder for config/orchestration
+#    (see packages/README.md, "Note on git activity"); packages added via
+#    scripts/add-package.sh fall back to plain git clones in that case, so
+#    there's nothing to submodule-init here.
+if [ -f ".gitmodules" ] && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   echo "==> Initializing git submodules"
   git submodule update --init --recursive
 else
-  echo "==> No .gitmodules found, skipping submodule init"
+  echo "==> No git submodules to initialize here (root has no .git, or no .gitmodules) — that's fine"
 fi
 
 # 2. Resolve/create the private workspace, if not using the submodule model.

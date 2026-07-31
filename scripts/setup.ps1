@@ -8,21 +8,19 @@ Set-Location $RepoRoot
 
 Write-Host "==> Setting up $(Split-Path -Leaf $RepoRoot)"
 
-# 0. A fresh instance of this template (downloaded as a zip, or copied
-#    rather than `git clone`d) won't have a `.git` yet. Submodules require
-#    the root itself to be a git repo, so initialize it automatically.
+# 1. Initialize git submodules (private-workspace/, packages/*, etc.), if
+#    any exist. It's expected and fine for this root to have no .git at
+#    all -- it's meant to stay a plain local folder for config/orchestration
+#    (see packages/README.md, "Note on git activity"); packages added via
+#    scripts/add-package.ps1 fall back to plain git clones in that case, so
+#    there's nothing to submodule-init here.
 git rev-parse --is-inside-work-tree *> $null
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "==> No git repository found at $RepoRoot -- running 'git init'"
-    git init
-}
-
-# 1. Initialize git submodules (private-workspace/, packages/*, etc.) if any.
-if (Test-Path ".gitmodules") {
+$IsGitRoot = ($LASTEXITCODE -eq 0)
+if ((Test-Path ".gitmodules") -and $IsGitRoot) {
     Write-Host "==> Initializing git submodules"
     git submodule update --init --recursive
 } else {
-    Write-Host "==> No .gitmodules found, skipping submodule init"
+    Write-Host "==> No git submodules to initialize here (root has no .git, or no .gitmodules) -- that's fine"
 }
 
 # 2. Resolve/create the private workspace, if not using the submodule model.

@@ -2,14 +2,21 @@
 
 This directory holds the application and shared packages for the monorepo.
 
-**Note on git activity:** the root repo (this template instance) is expected
-to have light, infrequent git activity — shared config, agent rules, docs,
-and submodule pointer bumps. It is still a real git repo (required to track
-submodule pointers via `.gitmodules`), just not where feature work happens.
-The actual project code and its commit history live inside each
-`packages/<name>/`, which has its own independent git repo/remote. Seeing
-little activity at the root is expected, not a sign that git isn't set up
-there.
+**Note on git activity:** it is completely fine — on first use, and
+permanently — for this project root to have **no `.git` at all**. It's
+meant to stay a plain local folder that holds config/orchestration
+(`workspace.yaml`, `agents/`, `shared/`, docs) for the project
+lead/team, not a place where feature work happens. Agents should never
+treat a missing `.git` at the root as an error to fix. The actual project
+code and its commit history live entirely inside each `packages/<name>/`,
+each with its own independent git repo/remote.
+
+If the root _does_ happen to have `.git` (e.g. you cloned this template
+from its own origin, or chose to track submodule pointers), that's also
+fine — `scripts/add-package.sh`/`.ps1` detect this automatically and add
+packages as git submodules (tracked via `.gitmodules`) instead of plain
+clones. Either way works; neither is required, and root git activity
+should stay light (config/docs/pointer bumps only) even when present.
 
 Each package should be a self-contained directory with its own dependency
 manifest (e.g. `package.json`, `pyproject.toml`) and, where applicable, its
@@ -35,21 +42,23 @@ scripts/add-package.sh <git-url> [package-name]      # macOS/Linux/Git Bash/WSL
 scripts/add-package.ps1 <git-url> [package-name]     # native Windows
 ```
 
-If the root repo itself doesn't have a `.git` yet (e.g. you downloaded this
-template as a zip instead of `git clone`ing it), the script initializes one
-automatically before adding the submodule — git submodules require the root
-to be a git repo.
-
-This adds it as a **git submodule** — the package keeps its own commit
-history and remote, and this repo only tracks a pointer (URL + pinned
-commit SHA) to it, so nothing proprietary from the package's own repo
-leaks into this repo beyond that reference. After running it:
+If the root repo has `.git`, this adds the package as a **git submodule** —
+it keeps its own commit history and remote, and this repo only tracks a
+pointer (URL + pinned commit SHA) to it, so nothing proprietary from the
+package's own repo leaks into this repo beyond that reference. After
+running it:
 
 1. Commit `.gitmodules` and the new submodule gitlink (the script tells you
    the exact commands).
 2. Wire its build/test/lint commands into `workspace.yaml` `tasks`.
 3. `git submodule update --init --recursive` (or `scripts/setup.sh`) is how
    anyone else cloning this repo pulls the package's contents in.
+
+If the root repo has **no** `.git` (the default, expected state — see
+"Note on git activity" above), the script plain `git clone`s the package
+instead. The package still gets its own full, independent git repo; there's
+just no root-level pointer to commit. No `.git init` at the root is needed
+before or after this — it's not a prerequisite.
 
 This is separate from, and composes with, the private-workspace submodule
 pattern described in `private/README.md`.
@@ -60,23 +69,28 @@ This root repo is meant to be the single place you work from across many
 projects, each living on its own host (GitHub, GHE, GitLab, ...) as its own
 git repo mounted under `packages/<name>`. The workflow for any one project:
 
-1. **Pull**: `git submodule update --init --remote packages/<name>` (or just
-   clone this repo with `git clone --recurse-submodules`, or run
-   `scripts/setup.sh`).
+1. **Pull**: if the package was added as a submodule (root has `.git`),
+   `git submodule update --init --remote packages/<name>` (or clone this
+   repo with `git clone --recurse-submodules`, or run `scripts/setup.sh`).
+   If it was added as a plain clone (root has no `.git` — the default, see
+   "Note on git activity" above), just `git -C packages/<name> pull`.
 2. **Work**: `cd packages/<name>` — you are now inside that project's own,
    independent git repository (its own remote, branches, and history,
-   completely separate from this root repo's). Branch, commit, and test as
-   normal, following that project's own conventions/`AGENTS.md` if it has one.
+   completely separate from this root repo's, if it even has one).
+   Branch, commit, and test as normal, following that project's own
+   conventions/`AGENTS.md` if it has one.
 3. **Check before pushing**: run
    `scripts/check-package-clean.sh <name>` from the root repo. It scans the
    package's changes for markers of this root repo's own proprietary/
    internal content (see Guardrails below) and fails if it finds any.
 4. **Push back**: still inside `packages/<name>`, `git push` — this goes to
-   _that project's own remote_, not this root repo's. Open a PR there as
-   usual.
-5. **Record the pointer**: back in the root repo, `git add packages/<name>`
-   and commit — this only records the package's URL and the new commit SHA
-   (a gitlink), never its file contents, so it's always safe to commit here.
+   _that project's own remote_, not this root repo's (which may not even
+   have one). Open a PR there as usual.
+5. **Record the pointer** (submodule mode only): back in the root repo,
+   `git add packages/<name>` and commit — this only records the package's
+   URL and the new commit SHA (a gitlink), never its file contents, so it's
+   always safe to commit here. Skip this step entirely if the root has no
+   `.git` — there's nothing to record.
 
 ### Guardrails: What Must Never Leave Through a Package
 

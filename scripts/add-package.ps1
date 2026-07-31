@@ -1,6 +1,17 @@
 # Import an existing repo (GitHub, GHE, GitLab, or any git host) into
-# packages/<name> as a git submodule, so it becomes a package of this repo
-# without merging its git history into this repo's history.
+# packages/<name>, so it becomes a package of this repo without merging its
+# git history into this repo's history.
+#
+# The root repo does NOT need its own .git for this to work, and never will
+# unless you choose to add one yourself:
+#   - If the root IS a git repo: adds the package as a git submodule
+#     (tracks a URL + pinned commit SHA pointer in .gitmodules).
+#   - If the root is NOT a git repo (the common case -- this root is meant
+#     to stay a plain local folder for config/orchestration; see
+#     packages/README.md, "Note on git activity"): plain `git clone`s the
+#     package instead. The package still gets its own full, independent git
+#     repo/history -- only the root-level pointer tracking is skipped.
+#     This is expected and fine, not a degraded mode.
 #
 # Usage:
 #   scripts/add-package.ps1 <git-url> [package-name]
@@ -22,18 +33,6 @@ $ErrorActionPreference = "Stop"
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot
 
-# git submodule add requires the root itself to be a git repo. A fresh
-# instance of this template (downloaded as a zip, or copied rather than
-# `git clone`d) won't have a `.git` yet -- initialize it automatically so
-# importing a package as a submodule works out of the box.
-git rev-parse --is-inside-work-tree *> $null
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "==> No git repository found at $RepoRoot -- running 'git init'"
-    git init
-    Write-Host "    (root repo initialized; this only tracks config/docs/submodule"
-    Write-Host "     pointers here -- see packages/README.md, 'Note on git activity')"
-}
-
 if (-not $Name) {
     $Name = [System.IO.Path]::GetFileNameWithoutExtension($Url)
 }
@@ -45,8 +44,18 @@ if (Test-Path $Target) {
     exit 1
 }
 
-Write-Host "==> Adding $Url as $Target (git submodule)"
-git submodule add $Url $Target
+git rev-parse --is-inside-work-tree *> $null
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "==> Adding $Url as $Target (git submodule)"
+    git submodule add $Url $Target
+    $Mode = "submodule"
+} else {
+    Write-Host "==> Root repo has no .git (this is expected -- see packages/README.md,"
+    Write-Host "    'Note on git activity'); cloning $Url directly into $Target"
+    Write-Host "    instead of adding it as a submodule pointer."
+    git clone $Url $Target
+    $Mode = "clone"
+}
 
 $GitkeepPath = Join-Path $Target ".gitkeep"
 if (Test-Path $GitkeepPath) {
@@ -54,11 +63,22 @@ if (Test-Path $GitkeepPath) {
 }
 
 Write-Host ""
-Write-Host "Added. Next steps:"
-Write-Host "  1. Commit .gitmodules and the new submodule gitlink:"
-Write-Host "       git add .gitmodules `"$Target`""
-Write-Host "       git commit -m `"Add $Name as a package (submodule)`""
-Write-Host "  2. Wire its build/test/lint commands into workspace.yaml under `"tasks`""
-Write-Host "     (and shared/tasks.md) so agents and IDEs can discover them."
-Write-Host "  3. Give it a clear README.md if it doesn't already have one."
-Write-Host "See packages/README.md for details."
+if ($Mode -eq "submodule") {
+    Write-Host "Added. Next steps:"
+    Write-Host "  1. Commit .gitmodules and the new submodule gitlink:"
+    Write-Host "       git add .gitmodules `"$Target`""
+    Write-Host "       git commit -m `"Add $Name as a package (submodule)`""
+    Write-Host "  2. Wire its build/test/lint commands into workspace.yaml under `"tasks`""
+    Write-Host "     (and shared/tasks.md) so agents and IDEs can discover them."
+    Write-Host "  3. Give it a clear README.md if it doesn't already have one."
+    Write-Host "See packages/README.md for details."
+} else {
+    Write-Host "Added (plain clone -- no root-level pointer to commit, since the root has"
+    Write-Host "no .git). Next steps:"
+    Write-Host "  1. Wire its build/test/lint commands into workspace.yaml under `"tasks`""
+    Write-Host "     (and shared/tasks.md) so agents and IDEs can discover them."
+    Write-Host "  2. Give it a clear README.md if it doesn't already have one."
+    Write-Host "  3. Work inside `"$Target`" as its own independent git repo (its own"
+    Write-Host "     remote/branches/history) -- commit and push there as usual."
+    Write-Host "See packages/README.md for details."
+}

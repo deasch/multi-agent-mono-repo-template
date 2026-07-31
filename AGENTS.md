@@ -36,8 +36,10 @@ template, with its own history and its own submodules where useful.
 
 This repo can also act as the single place you pull, work on, and push
 back multiple **separate project repos** from, each mounted under
-`packages/<name>` as its own git submodule (its own remote/history,
-possibly on a different host — GitHub, GHE, GitLab, etc.). See
+`packages/<name>` as its own git repo (its own remote/history, possibly on
+a different host — GitHub, GHE, GitLab, etc.), either as a git submodule of
+this root or, just as validly, a plain clone if this root has no `.git` of
+its own (see "This Root Repo Never Needs Its Own git init" below). See
 `packages/README.md`, "Working in a Package (Pull → Work → Push Back)".
 When working inside `packages/<name>`:
 
@@ -49,6 +51,23 @@ When working inside `packages/<name>`:
   through that project's own repo. See `packages/README.md`'s guardrails.
 - Run `scripts/check-package-clean.sh <name>` before pushing a package back
   to its own remote.
+
+## This Root Repo Never Needs Its Own git init
+
+It is completely fine — on first use, and permanently — for this project
+root to have **no `.git` at all**. It's meant to stay a plain local folder
+holding config/orchestration (`workspace.yaml`, `agents/`, `shared/`,
+docs) for the project lead/team; it is not where feature work happens.
+**Never treat a missing `.git` at the root as an error to fix or flag.**
+Actual project code and its commit history live entirely inside each
+`packages/<name>/`, each with its own independent git repo/remote.
+
+`scripts/add-package.sh`/`.ps1` and `scripts/setup.sh`/`.ps1` all detect
+this automatically: if the root has `.git`, packages are added as git
+submodules (tracked via `.gitmodules`); if not, packages are added as
+plain `git clone`s instead, and the root stays untouched. Both are valid,
+supported, permanent states — not a "before/after setup" distinction. See
+`packages/README.md`, "Note on git activity".
 
 ## Project Architecture, API & Build
 

@@ -29,6 +29,17 @@ for Copilot.
 - `private/` — public schema/example templates only; real private context
   lives in the private workspace, outside this repo.
 
+## Root Repo Git Is Optional, Permanently
+
+It is completely fine, on first use and forever, for this project root to
+have no `.git` at all — never treat that as an error. It's meant to stay a
+plain local folder for config/orchestration; real project work and its
+commit history live inside each `packages/<name>/`, each with its own
+independent git repo. `scripts/add-package.sh`/`.ps1` and
+`scripts/setup.sh`/`.ps1` detect this automatically and use plain
+`git clone` instead of submodules when the root has no `.git`. See
+`AGENTS.md`, "This Root Repo Never Needs Its Own git init".
+
 ## Public Knowledge vs. Private Context
 
 Key: public knowledge lives in each repo; private context and workflow

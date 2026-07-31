@@ -70,6 +70,12 @@ Once a plan exists, agents execute concurrently, one per role/worktree:
 - **Tester** verifies each branch independently; failing tests block merge.
 - **Documentarian** updates docs once behavior is finalized.
 
+When one role's subtask output needs to be consumed by another (e.g.
+Developer handing a finished worktree to Reviewer or Tester), or a
+role's session ends mid-subtask, use the handoff protocol in
+`shared/handover.md` so the receiving role has the objective, current
+state, decisions, and next steps without re-deriving them from scratch.
+
 ## Putting It Together: Plan Mode → Team Mode
 
 1. **Plan Mode** decomposes the task into role-assigned subtasks (who),

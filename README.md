@@ -2,9 +2,9 @@
 
 A monorepo template with a **single, unified workspace configuration**
 (`workspace.yaml`) that drives consistent behavior across AI coding agents
-(Devin, Claude Code, Cursor, Windsurf) and IDEs (VS Code), plus a
-multi-agent-role workflow for humans and AI to collaborate on the same
-codebase.
+(Devin, Claude Code, Cursor, Windsurf, GitHub Copilot) and IDEs (VS Code),
+plus a multi-agent-role workflow for humans and AI to collaborate on the
+same codebase.
 
 ## Why
 
@@ -19,9 +19,11 @@ integration file generated from (and kept in sync with) it.
   tasks, shared knowledge, and IDE integration points.
 - `agents/` — agent role definitions (architect, developer, reviewer, tester,
   documentarian): responsibilities, constraints, allowed tools, prompts.
-- `shared/` — shared rules, conventions, security guardrails, task docs, and
-  `workflows.md` (Worktree + Plan Mode + Team Mode) referenced by every
-  agent and IDE.
+- `shared/` — shared rules, conventions, security guardrails, task docs,
+  `workflows.md` (Worktree + Plan Mode + Team Mode), and `handover.md` (the
+  session/agent handoff protocol) referenced by every agent and IDE.
+- `docs/handover/` — tracked, ephemeral handover documents produced from
+  `shared/handover.md`'s template (deleted/archived after merge).
 - `packages/` — your monorepo packages go here.
 - `private/` — public schema/example templates only; real private context
   and workflow rules live in the private workspace, outside this repo. See
@@ -33,6 +35,9 @@ integration file generated from (and kept in sync with) it.
 - `.windsurf/workflows/` — runnable Windsurf slash-command workflows (e.g.
   `/team-worktree`).
 - `.devin/config.json` — Devin configuration.
+- `.devin/skills/handover/SKILL.md` — the `/handover` skill (session/agent
+  handoff, see `shared/handover.md`).
+- `.github/copilot-instructions.md` — GitHub Copilot instructions.
 - `.vscode/` — editor settings, recommended extensions, and tasks wired to
   `workspace.yaml`.
 - `.gitmodules` — optional pointer to mount your private workspace inside
@@ -91,6 +96,11 @@ Mode decomposes the task across agent roles, each parallelizable subtask
 gets its own git worktree, and Team Mode runs the roles concurrently. See
 `shared/workflows.md` for the pattern and `.windsurf/workflows/team-worktree.md`
 for the runnable steps.
+
+When a task is incomplete and needs to change hands — a session ending, a
+role/worktree switch, or escalating to a human — use the handoff protocol in
+`shared/handover.md` (automated by the `/handover` Devin CLI skill) so
+context, decisions, and next steps aren't lost.
 
 ## Conventions & Security
 

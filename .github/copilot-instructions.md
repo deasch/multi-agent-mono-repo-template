@@ -1,13 +1,17 @@
-# Claude Code Project Instructions
+# GitHub Copilot Instructions
 
 This repository uses a unified workspace configuration. `workspace.yaml` is the
 single source of truth for packages, agent roles, tasks, and shared knowledge.
+See `AGENTS.md` at the repo root for the full rules — this file summarizes them
+for Copilot.
 
 ## Before Every Task
 
 1. Read `workspace.yaml`.
-2. Identify the relevant agent role from `agents/`.
-3. Read that role file.
+2. Confirm which single project repo this task concerns (see `AGENTS.md`,
+   "Multi-Project Discipline") — never edit more than one project repo in
+   the same task.
+3. Identify the relevant agent role from `agents/` and read that role file.
 4. Read `shared/security.md` and `shared/conventions.md` before writing code.
 
 ## Directories
@@ -48,14 +52,8 @@ rules live in the private workspace.
 
 ## Tasks
 
-Use the tasks defined in `workspace.yaml` under `tasks`:
-
-- `lint`
-- `test`
-- `build`
-- `sync`
-
-Run the relevant task before declaring work complete.
+Use the tasks defined in `workspace.yaml` under `tasks`: `setup`, `lint`,
+`test`, `build`, `sync`. Run the relevant task before declaring work complete.
 
 ## Multi-Agent Collaboration
 
@@ -66,10 +64,11 @@ Run the relevant task before declaring work complete.
 - **Documentarian** owns documentation.
 
 If a task spans roles, consult the relevant agent files and keep pull requests
-focused and reviewable.
+focused and reviewable. For multi-role work, follow Worktree + Plan Mode +
+Team Mode in `shared/workflows.md`.
 
 ## Session Handover
 
 If work is incomplete when a session ends or ownership changes hands
 (role/worktree switch, escalation to a human), follow the handoff protocol
-in `shared/handover.md`.
+in `shared/handover.md`. Write the handover to `docs/handover/<task-slug>.md`.

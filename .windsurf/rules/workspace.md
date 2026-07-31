@@ -21,10 +21,19 @@ Read it at the start of every session.
 ## Directories
 
 - `agents/` — agent role definitions.
-- `shared/` — shared rules, conventions, security, and tasks.
+- `shared/` — shared rules, conventions, security, tasks, and `handover.md`
+  (session/agent handoff protocol).
+- `docs/handover/` — tracked, ephemeral handover documents (see
+  `shared/handover.md`).
 - `packages/` — monorepo packages.
 - `private/` — public schema/example templates only; real private context
   lives in the private workspace, outside this repo.
+
+## Handover
+
+If work is incomplete when a session ends or ownership changes hands
+(role/worktree switch, escalation to a human), follow the handoff protocol
+in `shared/handover.md`.
 
 ## Public Knowledge vs. Private Context
 

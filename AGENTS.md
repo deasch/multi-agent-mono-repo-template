@@ -2,7 +2,7 @@
 
 This repository uses a unified workspace configuration defined in `workspace.yaml`.
 These rules apply to all AI agents and IDEs working here, including Devin CLI,
-Cursor, Claude Code, Windsurf, and VS Code.
+Cursor, Claude Code, Windsurf, GitHub Copilot, and VS Code.
 
 ## Required First Steps
 
@@ -111,3 +111,13 @@ rules live in the private workspace.**
   Team Mode pattern in `shared/workflows.md`: decompose the task (Plan
   Mode), give each parallelizable subtask its own git worktree, and run
   roles concurrently (Team Mode).
+
+## Session Handover
+
+When a task is incomplete and control needs to change hands — a session
+ending, a role/worktree switch in Team Mode, or escalating a blocker to a
+human — follow the handoff protocol in `shared/handover.md`. It defines the
+required package (objective, progress, decisions, files touched, open
+questions, next steps) and where it's stored (`docs/handover/<task-slug>.md`).
+Use the `/handover` skill (`.devin/skills/handover/SKILL.md`) to produce or
+resume one.

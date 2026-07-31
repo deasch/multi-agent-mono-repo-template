@@ -17,3 +17,10 @@ brief prompt. AI tools should read the relevant role file before acting on a tas
 
 Roles are also summarized in `workspace.yaml` under `agents`. When the two
 conflict, `workspace.yaml` is canonical; update the markdown file to match.
+
+## Handing Off Incomplete Work
+
+If a role's work is incomplete when a session ends or ownership needs to
+change (including switching roles or worktrees in Team Mode, see
+`shared/workflows.md`), use the handoff protocol in `shared/handover.md`
+instead of leaving context only in conversation history.

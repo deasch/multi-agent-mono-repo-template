@@ -180,6 +180,7 @@ shared:
   security: "shared/security.md"
   tasks: "shared/tasks.md"
   workflows: "shared/workflows.md"
+  handover: "shared/handover.md"
 
 # Public knowledge vs. private context.
 # Key: public knowledge lives in each repo; private context and workflow

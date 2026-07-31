@@ -26,3 +26,9 @@ The workspace defines the following agent roles in `workspace.yaml` and `agents/
 - The Reviewer must approve significant changes.
 - The Tester verifies behavior before merging.
 - The Documentarian keeps docs in sync.
+
+## Handover
+
+If work is incomplete when a session ends or ownership changes hands
+(role/worktree switch, escalation to a human), follow the handoff protocol
+in `shared/handover.md`.

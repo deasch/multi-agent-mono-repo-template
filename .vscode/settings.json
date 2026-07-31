@@ -13,5 +13,9 @@
   },
   "yaml.schemas": {
     "https://json.schemastore.org/yamllint.json": "workspace.yaml"
+  },
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.instructionsFilesLocations": {
+    ".github/copilot-instructions.md": true
   }
 }

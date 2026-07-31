@@ -4,9 +4,13 @@
 
 - `workspace.yaml` is the canonical workspace definition.
 - `agents/` contains agent role definitions.
-- `shared/` contains shared rules, conventions, security, and task documentation.
+- `shared/` contains shared rules, conventions, security, task documentation,
+  and `handover.md` (the session/agent handoff protocol).
+- `docs/handover/` contains tracked, ephemeral handover documents generated
+  from `shared/handover.md`'s template; delete/archive after merge.
 - `packages/` is the monorepo package directory.
-- IDE-specific configuration lives in `.vscode/`, `.cursor/`, `.windsurf/`, `.claude/`, and `.devin/`.
+- IDE/tool-specific configuration lives in `.vscode/`, `.cursor/`, `.windsurf/`,
+  `.claude/`, `.devin/`, and `.github/copilot-instructions.md`.
 - `private/` holds only public schema/example templates; real private
   context lives outside this repo in the private workspace. See
   "Public Knowledge vs. Private Context" below and `private/README.md`.

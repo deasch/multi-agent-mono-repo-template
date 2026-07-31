@@ -39,11 +39,22 @@ rules live in the private workspace.
 
 ## Naming
 
-- Directories and files: `kebab-case`.
+- Directories and files **authored in this root repo** (docs, scripts,
+  `shared/`, `agents/`, IDE config, etc.): `kebab-case`.
 - Markdown documentation: descriptive, kebab-case names.
 - Agent role files: `agents/<role>.md`.
 - Cursor rules: `.cursor/rules/<NN>-<name>.mdc`.
 - Windsurf rules: `.windsurf/rules/<name>.md`.
+- **`packages/<name>/` is the one exception**: when importing an existing
+  repo (`scripts/add-package.sh`/`.ps1`), the package directory name should
+  match the source repo's actual name/casing by default (whatever
+  `basename <git-url> .git` yields — kebab-case, PascalCase, camelCase,
+  snake_case, all allowed), not be forced into kebab-case. Renaming an
+  imported package away from its own repo's name causes confusion when
+  cross-referencing it with its own remote/history. An explicit
+  `[package-name]` argument to `add-package.sh` can still override it if
+  you have a good reason to (e.g. avoiding a collision) — just don't
+  rewrite casing purely for convention's sake.
 
 ## Tasks
 

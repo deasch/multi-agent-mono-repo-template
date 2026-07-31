@@ -8,7 +8,10 @@ Read it at the start of every session.
 0. Run `scripts/setup.sh` (or `.ps1`) once per fresh checkout instead of
    manually probing git/private-workspace state with ad-hoc shell
    commands — it already resolves this safely in one call, and avoids
-   hitting a tool's own command-approval/sandbox limits.
+   hitting a tool's own command-approval/sandbox limits. Same for
+   importing a package: run `scripts/add-package.sh`/`.ps1 <git-url>`
+   directly rather than pre-checking with your own `cd`/`git
+rev-parse`/`ls` commands first.
 1. `workspace.yaml`
 2. `shared/security.md`
 3. `shared/conventions.md`

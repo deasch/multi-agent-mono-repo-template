@@ -20,6 +20,13 @@
 # Examples:
 #   scripts/add-package.sh git@github.com:my-org/my-service.git
 #   scripts/add-package.sh https://github.ghe.example.com/my-org/my-lib.git my-lib
+#
+# AGENTS: just run this script directly with the URL — it already detects
+# whether the root has `.git` and picks submodule vs. plain-clone mode
+# internally (see above). Don't manually pre-check with `cd`/`git
+# rev-parse`/`ls .git` etc. before calling it; that's redundant and more
+# likely to hit a tool's own command-approval/sandbox limits than this
+# single script invocation is.
 
 set -euo pipefail
 

@@ -13,7 +13,11 @@ Cursor, Claude Code, Windsurf, GitHub Copilot, and VS Code.
    commands (reading `.gitmodules`, listing `$HOME`, checking env vars,
    `git rev-parse`, ...) in one invocation is more likely to hit a tool's
    own command-approval/sandbox limits (e.g. restricted access outside the
-   project directory) than to actually be necessary.
+   project directory) than to actually be necessary. Same principle for
+   importing a package: run `scripts/add-package.sh`/`.ps1 <git-url>`
+   directly — it already detects submodule-vs-plain-clone mode internally
+   (see `packages/README.md`) — rather than pre-checking with your own
+   `cd`/`git rev-parse`/`ls` commands first.
 1. Read `workspace.yaml` at the start of every session.
 2. If it's unclear which project this task concerns (e.g. multiple project
    repos/checkouts are in scope, or you're working from the private

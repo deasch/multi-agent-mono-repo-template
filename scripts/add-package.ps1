@@ -19,6 +19,13 @@
 # Examples:
 #   scripts/add-package.ps1 git@github.com:my-org/my-service.git
 #   scripts/add-package.ps1 https://github.ghe.example.com/my-org/my-lib.git my-lib
+#
+# AGENTS: just run this script directly with the URL -- it already detects
+# whether the root has .git and picks submodule vs. plain-clone mode
+# internally (see above). Don't manually pre-check with Set-Location/git
+# rev-parse/Test-Path .git etc. before calling it; that's redundant and
+# more likely to hit a tool's own command-approval/sandbox limits than
+# this single script invocation is.
 
 param(
     [Parameter(Mandatory = $true)]

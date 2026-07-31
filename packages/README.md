@@ -60,6 +60,13 @@ instead. The package still gets its own full, independent git repo; there's
 just no root-level pointer to commit. No `.git init` at the root is needed
 before or after this — it's not a prerequisite.
 
+**Agents: just run the script directly with the URL** — don't manually
+pre-check whether the root has `.git` with your own `cd`/`git
+rev-parse`/`ls`-style commands first. The script already handles that
+detection internally, and ad-hoc multi-step shell probing is more likely
+to hit a tool's own command-approval/sandbox limits than a single script
+invocation is.
+
 This is separate from, and composes with, the private-workspace submodule
 pattern described in `private/README.md`.
 

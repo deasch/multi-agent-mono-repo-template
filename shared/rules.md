@@ -10,7 +10,11 @@ All AI agents and IDEs must follow these rules when working in this repository.
    root git status safely in one call. Chaining several unrelated
    commands together (reading `.gitmodules`, listing `$HOME`, checking env
    vars, `git rev-parse`, ...) is more likely to hit a tool's own
-   command-approval/sandbox limits than to actually be necessary.
+   command-approval/sandbox limits than to actually be necessary. Same
+   principle for importing a package: run `scripts/add-package.sh`/`.ps1
+<git-url>` directly rather than pre-checking with your own `cd`/`git
+rev-parse`/`ls` commands first — it already detects
+   submodule-vs-plain-clone mode internally.
 1. Read `workspace.yaml` at the start of every session or task.
 2. Identify the relevant `agents/<role>.md` for the work and read it.
 3. Read `shared/security.md` for guardrails before writing code or configuration.
